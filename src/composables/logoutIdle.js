@@ -1,8 +1,23 @@
 import { router } from '../routes/index.js';
 import { onMounted, onUnmounted, ref } from 'vue';
+import { useToast } from "vue-toast-notification";
+
+const MILLISECONDS_IN_SECOND = 1000;
+const MILLISECONDS_IN_MINUTE = 60 * MILLISECONDS_IN_SECOND;
+const toast = useToast();
+const warningTimeoutId = ref(null);
+const timeoutId = ref(null);
 
 function startTimeout(timeoutId, timeout, isLoggedOut) {
-    if (timeoutId.value !== null) window.clearTimeout(timeoutId.value);
+    if (timeoutId.value !== null) window.clearTimeout(timeoutId);
+
+    const warningTimeout = timeout - MILLISECONDS_IN_SECOND * 10;
+    if (warningTimeout > 0) {
+        warningTimeoutId.value = window.setTimeout(() => {
+            toast.warning("You will be logged out due to inactivity");
+        }, warningTimeout);
+    }
+
     timeoutId.value = window.setTimeout(() => {
         localStorage.removeItem("activeUserId");
         isLoggedOut.value = true;
@@ -29,12 +44,12 @@ function manageTimeout(timeoutId, isLoggedOut, timeout) {
     onUnmounted(() => {
         window.removeEventListener("blur", onBlur);
         window.removeEventListener("mousedown", onMouseDown);
+        if (warningTimeoutId.value !== null) window.clearTimeout(warningTimeoutId.value);
     });
 }
 
-export function useLogoutIdle(timeout = 1000 * 60 * 1) {
+export function useLogoutIdle(timeout = MILLISECONDS_IN_MINUTE * 1) {
     let isLoggedOut = ref(localStorage.getItem("activeUserId") === null);
-    let timeoutId = ref(null);
 
     onMounted(() => {
         manageTimeout(timeoutId, isLoggedOut, timeout);
@@ -44,7 +59,7 @@ export function useLogoutIdle(timeout = 1000 * 60 * 1) {
     });
 
     onUnmounted(() => {
-        if (timeoutId.value !== null) window.clearTimeout(timeoutId.value);
+        if (timeoutId.value !== null) window.clearTimeout(timeoutId);
     });
 
     return { isLoggedOut };

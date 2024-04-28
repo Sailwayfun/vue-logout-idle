@@ -11,6 +11,9 @@ dependencies:
   vue-router:
     specifier: '4'
     version: 4.3.2(vue@3.4.25)
+  vue-toast-notification:
+    specifier: ^3
+    version: 3.1.2(vue@3.4.25)
 
 devDependencies:
   '@vitejs/plugin-vue':
@@ -477,6 +480,7 @@ packages:
     resolution: {integrity: sha512-WdOOppmUNU+IbZ0PaDiTst80zjnrOkyJNHoKupIcVyU8Lvla3Ugx94VzkQ32Ijqd7UhHJy75gNWDMUekcrSJ6g==}
     engines: {node: '>=12'}
     hasBin: true
+    requiresBuild: true
     optionalDependencies:
       '@esbuild/aix-ppc64': 0.20.2
       '@esbuild/android-arm': 0.20.2
@@ -610,6 +614,15 @@ packages:
       vue: ^3.2.0
     dependencies:
       '@vue/devtools-api': 6.6.1
+      vue: 3.4.25
+    dev: false
+
+  /vue-toast-notification@3.1.2(vue@3.4.25):
+    resolution: {integrity: sha512-oNRL/W9aaHoeScp+iTIW7k09vM16/+8aptp2maa+7qTB43JuxmAgKdXKFYtf+uvSNOYYq2BIWgLCeJ61pwom/A==}
+    engines: {node: '>=12.15.0'}
+    peerDependencies:
+      vue: ^3.0
+    dependencies:
       vue: 3.4.25
     dev: false
 
