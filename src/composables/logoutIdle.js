@@ -9,7 +9,15 @@ const warningTimeoutId = ref(null);
 const timeoutId = ref(null);
 
 function startTimeout(timeoutId, timeout, isLoggedOut) {
-    if (timeoutId.value !== null) window.clearTimeout(timeoutId);
+    if (timeoutId.value !== null) {
+        window.clearTimeout(timeoutId.value);
+        timeoutId.value = null;
+    }
+
+    if (warningTimeoutId.value !== null) {
+        window.clearTimeout(warningTimeoutId.value);
+        warningTimeoutId.value = null;
+    }
 
     const warningTimeout = timeout - MILLISECONDS_IN_SECOND * 10;
     if (warningTimeout > 0) {
@@ -44,7 +52,12 @@ function manageTimeout(timeoutId, isLoggedOut, timeout) {
     onUnmounted(() => {
         window.removeEventListener("blur", onBlur);
         window.removeEventListener("mousedown", onMouseDown);
-        if (warningTimeoutId.value !== null) window.clearTimeout(warningTimeoutId.value);
+        if (timeoutId.value !== null) {
+            window.clearTimeout(timeoutId.value);
+        }
+        if (warningTimeoutId.value !== null) {
+            window.clearTimeout(warningTimeoutId.value);
+        }
     });
 }
 
@@ -59,7 +72,10 @@ export function useLogoutIdle(timeout = MILLISECONDS_IN_MINUTE * 1) {
     });
 
     onUnmounted(() => {
-        if (timeoutId.value !== null) window.clearTimeout(timeoutId);
+        if (timeoutId.value !== null) {
+            window.clearTimeout(timeoutId.value);
+            timeoutId.value = null;
+        }
     });
 
     return { isLoggedOut };
