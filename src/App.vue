@@ -4,3 +4,8 @@
 </template>
 
 <style scoped></style>
+
+<script>
+import { useLogoutIdle } from "../composables/useLogoutIdle.js";
+useLogoutIdle();
+</script>
