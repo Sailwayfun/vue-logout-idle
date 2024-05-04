@@ -35,10 +35,9 @@ function startTimeout(timeoutId, timeout, isLoggedOut) {
 }
 
 function manageTimeout(timeoutId, isLoggedOut, timeout) {
-    const onBlur = () => {
-        if (isLoggedOut.value) return;
-        startTimeout(timeoutId, timeout, isLoggedOut);
-    };
+    if (isLoggedOut.value) return;
+    startTimeout(timeoutId, timeout, isLoggedOut);
+
     const onMouseDown = () => {
         if (timeoutId.value !== null) {
             window.clearTimeout(timeoutId.value);
@@ -46,11 +45,9 @@ function manageTimeout(timeoutId, isLoggedOut, timeout) {
         }
     };
 
-    window.addEventListener("blur", onBlur);
     window.addEventListener("mousedown", onMouseDown);
 
     onUnmounted(() => {
-        window.removeEventListener("blur", onBlur);
         window.removeEventListener("mousedown", onMouseDown);
         if (timeoutId.value !== null) {
             window.clearTimeout(timeoutId.value);
